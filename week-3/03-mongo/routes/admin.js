@@ -1,6 +1,6 @@
 const express=require('express');
 const adminMiddleware=require("../middleware/adminMiddleware.js");
-const { Admin, Course } = require("../db");
+const { Admin, Course, User } = require("../db");
 const router = express.Router();
 
 router.post('/signup', async (req,res)=> {
@@ -33,14 +33,23 @@ router.post('/courses',adminMiddleware,async(req,res)=> {
     res.json({
         message: "course created successfully", courseId:newCourse._id
     })
-
 })
 
-router.get('/courses', adminMiddleware, async(req,res)=> 
+router.get('/purchasedcourses', adminMiddleware, async(req,res)=> 
 {
     //implement fetching all courses logic
-    const respo=await Course.find({});
-    res.json({courses:respo});
+    const user=await User.findOne({
+        username:req.headers.username
+    });
+    console.log(user.purchasedCourse);
+    const Course=await Course.find({
+        courseId:{
+            "$in":user.purchasedCourse
+        }
+    })
+    res.json({
+        courses:courses
+    })
 })
 
 // ✅ EXPORT the router
