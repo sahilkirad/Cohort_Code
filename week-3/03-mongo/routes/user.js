@@ -52,15 +52,18 @@ router.post('/courses/:courseId', userMiddleware, async (req, res) => {
         }
 
         return res.json({ message: 'purchase successful' });
-   
+    
 });
 
 
 router.get('/purchasedCourses', userMiddleware, async (req, res) => {
     // Implement fetching purchased courses logic
    
-    const repo = await User.findOne({username:req.headers.username});
-    res.json({ courses: repo });
+    const user = await User.findOne({username:req.headers.username});
+    const courses=await Course.findOne({
+        _id:user.purchasedCourse
+    })
+    res.json({"course":courses})
 })
 
 module.exports = router;
