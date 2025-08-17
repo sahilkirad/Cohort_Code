@@ -1,10 +1,16 @@
-require('dotenv').config();
-const mongoose = require('mongoose');
 
+const mongoose = require('mongoose');
+require("dotenv").config({ path: "../../.env" });
+
+const MONGO_URI = process.env.MONGODB_URI2;
+console.log("MONGODB_URI2 =", MONGO_URI); // Debug print
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI2)
+    
     .then(() => console.log("connected to mongodb"))
     .catch(() => console.log("connection error"))
+
+
 
 // Define schemas
 const AdminSchema = new mongoose.Schema({
